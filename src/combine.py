@@ -19,10 +19,11 @@ class Combine(Node[Tuple[InputType1, InputType2], OutputType],
     def __init__(self, 
                  base_one: Node[InputType1, IntermediateType1],
                  base_two: Node[InputType2, IntermediateType2],
-                 func: Callable[[IntermediateType1, IntermediateType2], OutputType]):
+                 func: Callable[[IntermediateType1, IntermediateType2], OutputType]) -> None:
         self.base_one = base_one
         self.base_two = base_two
         self.func = func
+        super().__init__()
     
     @property
     def base_node_one(self) -> Node[InputType1, IntermediateType1]:
@@ -37,5 +38,5 @@ class Combine(Node[Tuple[InputType1, InputType2], OutputType],
         return self.func
 
     @override
-    def process(self, input_data: Tuple[InputType1, InputType2]) -> OutputType:
+    def _process(self, input_data: Tuple[InputType1, InputType2]) -> OutputType:
         return self.func(self.base_one.process(input_data[0]), self.base_two.process(input_data[1]))

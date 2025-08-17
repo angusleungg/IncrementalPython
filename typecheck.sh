@@ -1,0 +1,1 @@
+find ./src -name "*.py" -exec mypy {} +

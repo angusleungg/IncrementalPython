@@ -5,26 +5,38 @@ from src.fanout import Fanout
 from src.leaf import Leaf
 from src.node import Node
 from src.function import Function
+import time
 
 from src.utils import process_graph_from_leaves
+
+def sum(x, y):
+    time.sleep(2)
+    return x + y
 
 def main():
     #make a graph that goes from 4 inputs to 2, to 1
 
     leaf1 = Leaf(1)
     leaf2 = Leaf(-2)
-    leaf3 = Leaf(-3)
+    leaf3 = Leaf(3)
+    leaf4 = Leaf(4)
 
-    combine_node = Combine(leaf1, leaf2, lambda x, y: x + y)
-    extend_1 = Extend(leaf3, lambda x: x * 2)
-    extend_2 = Extend(leaf3, lambda x: x * 2)
-    comb_2 = Combine(extend_1, extend_2, lambda x, y: x - y)
+    comb = Combine(leaf1, leaf2, sum)
+    comb2= Combine(leaf3, leaf4, sum)
 
-    bind = Bind(comb_2, lambda x: Function(lambda y: x + y) if x > 0 else Function(lambda y: y - x))
+    final_node = Combine(comb, comb2, sum)
 
-    final_node = Combine(combine_node, bind, lambda x, y: x + y)
+    # time first
+    start = time.perf_counter()
+    x = process_graph_from_leaves(final_node)
+    end = time.perf_counter()
+    print(f"First run took {end - start:.4f} seconds")
 
-    print(process_graph_from_leaves(final_node))
+    start = time.perf_counter()
+    y = process_graph_from_leaves(final_node)
+    end = time.perf_counter()
+    print(f"Second run took {end - start:.4f} seconds")
+    assert x == y
     
 if __name__ == "__main__":
     main()

@@ -19,10 +19,11 @@ class Fanout(Node[InputType, Tuple[OutputType1, OutputType2]],
     def __init__(self, 
                  base: Node[InputType, IntermediateType],
                  func_one: Callable[[IntermediateType], OutputType1],
-                 func_two: Callable[[IntermediateType], OutputType2]):
+                 func_two: Callable[[IntermediateType], OutputType2]) -> None:
         self.base = base
         self.func_one = func_one
         self.func_two = func_two
+        super().__init__()
 
     @property
     def base_node(self) -> Node[InputType, IntermediateType]:
@@ -37,5 +38,5 @@ class Fanout(Node[InputType, Tuple[OutputType1, OutputType2]],
         return self.func_two
 
     @override
-    def process(self, input_data: InputType) -> Tuple[OutputType1, OutputType2]:
+    def _process(self, input_data: InputType) -> Tuple[OutputType1, OutputType2]:
         return self.func_one(self.base.process(input_data)), self.func_two(self.base.process(input_data))

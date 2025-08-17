@@ -11,13 +11,18 @@ class Leaf(Node[None, OutputType],
     a constant value with no processing.
     """
     def __init__(self,
-                 value: OutputType):
-        self.value = value
+                 _fixed_value: OutputType) -> None:
+        self._fixed_value = _fixed_value
+        super().__init__()
 
     @property
-    def return_value(self) -> OutputType:
-        return self.value
+    def fixed_value(self) -> OutputType:
+        return self._fixed_value
+
+    @fixed_value.setter
+    def fixed_value(self, value: OutputType) -> None:
+        self._fixed_value = value
 
     @override
-    def process(self, input_data: None) -> OutputType:
-        return self.value
+    def _process(self, input_data: None) -> OutputType:
+        return self.fixed_value

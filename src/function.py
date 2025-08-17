@@ -16,13 +16,14 @@ class Function(Node[InputType, OutputType],
     """
 
     def __init__(self, 
-                 func: Callable[[InputType], OutputType]):
+                 func: Callable[[InputType], OutputType]) -> None:
         self.func = func
+        super().__init__()
 
     @property
     def function(self) -> Callable[[InputType], OutputType]:
         return self.func
 
     @override
-    def process(self, input_data: InputType) -> OutputType:
+    def _process(self, input_data: InputType) -> OutputType:
         return self.func(input_data)

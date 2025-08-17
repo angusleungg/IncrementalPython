@@ -13,9 +13,10 @@ class Extend(Node[InputType, OutputType],
     """
     def __init__(self, 
                  base: Node[InputType, IntermediateType], 
-                 func: Callable[[IntermediateType], OutputType]):
+                 func: Callable[[IntermediateType], OutputType]) -> None:
         self.base = base
         self.func = func
+        super().__init__()
     
     @property
     def base_node(self) -> Node[InputType, IntermediateType]:
@@ -26,5 +27,5 @@ class Extend(Node[InputType, OutputType],
         return self.func
 
     @override
-    def process(self, input_data: InputType) -> OutputType:
+    def _process(self, input_data: InputType) -> OutputType:
         return self.func(self.base.process(input_data))
